@@ -1,21 +1,24 @@
 from db import all_users
+from db import insertUser
+from db import editUser
+from db import deleteUser
 
 def new_user():
     userName = input("Enter a username: ")
     password = input("Enter a password: ")
     full_name = input("Enter the Full Name:")
-    print("call db.insertUser with the three parameters")
+    insertUser(userName, password, full_name)
 
 def change_user():
     userName = input("Enter the username: ")
     userName2 = input("Enter the desired username: ")
     password2 = input("Enter the desired password: ")
     full_name2 = input("Enter the desired Full Name:")
-    print("call db.editUser with the four parameters")
+    editUser(userName, userName2, password2, full_name2)
 
 def remove_user():
     userName = input("Enter a username to be removed: ")
-    print("call db.deleteUser with the three parameters")
+    deleteUser(userName)
 
 val = 0
 while val != "5":

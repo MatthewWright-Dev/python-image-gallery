@@ -17,6 +17,7 @@ def get_password():
 def connect():
 	global connection
 	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password())
+	connection.set_session(autocommit=True)
 
 def execute(query, args=None):
 	global connection
@@ -38,5 +39,29 @@ def all_users():
 #	for row in res:
 #		print(row)
 
-if __name__ == '__main__':
-        main()
+#if __name__ == '__main__':
+#        main()
+def insertUser(userName, password, full_name):
+	connect()
+	query = "insert into users (userName, password, full_name) values(%s, %s, %s);"
+	try:
+		execute(query, (userName, password, full_name))
+	except:
+		print("Unexpected error: ")
+
+def deleteUser(userName):
+	connect()
+	query = "DELETE FROM users WHERE username=%s;"
+	try:
+		execute(query, (userName,))
+	except Exception as e:
+		print("Unexpected error", e)
+
+def editUser(userName, userName2, password2, full_name2):
+	connect()
+	deleteUser(userName)
+	query = "insert into users (userName, password, full_name) values(%s, %s, %s);"
+	try:
+		execute(query, (userName2, password2, full_name2))
+	except:
+		print("Unexpected error")
