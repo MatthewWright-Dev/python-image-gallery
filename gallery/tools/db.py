@@ -27,15 +27,16 @@ def execute(query, args=None):
 		cursor.execute(query, args)
 	return cursor
 
-def main():
+#def main():
+def all_users():
 	connect()
 	res = execute('select * from users')
 	for row in res:
 		print(row)
-	res = execute("update users set password=%s where username='fred'", ('banana',))
-	res = execute('select * from users')
-	for row in res:
-		print(row)
+#	res = execute("update users set password=%s where username='fred'", ('banana',))
+#	res = execute('select * from users')
+#	for row in res:
+#		print(row)
 
 if __name__ == '__main__':
         main()
