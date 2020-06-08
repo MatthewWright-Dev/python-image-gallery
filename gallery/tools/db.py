@@ -18,17 +18,24 @@ def connect():
 	global connection
 	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password())
 
-def execute(query):
-        global connection
-        cursor = connection.cursor()
-        cursor.execute(query)
-        return cursor
+def execute(query, args=None):
+	global connection
+	cursor = connection.cursor()
+	if not args :
+               	cursor.execute(query)
+	else:
+		cursor.execute(query, args)
+	return cursor
 
 def main():
 	connect()
 	res = execute('select * from users')
 	for row in res:
-                print(row)
+		print(row)
+	res = execute("update users set password=%s where username='fred'", ('banana',))
+	res = execute('select * from users')
+	for row in res:
+		print(row)
 
 if __name__ == '__main__':
         main()
