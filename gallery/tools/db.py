@@ -1,21 +1,37 @@
 import psycopg2
+import json
+from secrets import get_secret_image_gallery
 
-db_host ="database-1.cgh7vkgen2ke.us-east-2.rds.amazonaws.com"
+db_host = "image-gallery.cgh7vkgen2ke.us-east-2.rds.amazonaws.com"
+#db_host ="database-1.cgh7vkgen2ke.us-east-2.rds.amazonaws.com"
 db_name="image_gallery"
 db_user="image_gallery"
 
-password_file = "/home/ec2-user/.image_gallery_config"
+password_file = "/home/ec2-user/.ig_config"
 
 connection = None
 
+def get_secret():
+        jsonString = get_secret_image_gallery()
+#        print(json.loads(jsonString)['password'])
+	
+        return json.loads(jsonString)
+
+
+
+#def get_password(secret):
+#        return secret['password']
 def get_password():
         f = open(password_file, "r")
         result = f.readline()
+#        print(result)
         f.close()
         return result[:-1]
 
 def connect():
 	global connection
+#	secret = get_secret()
+#	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password(secret))
 	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password())
 	connection.set_session(autocommit=True)
 
