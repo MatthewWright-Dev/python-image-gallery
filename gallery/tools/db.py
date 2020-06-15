@@ -18,21 +18,20 @@ def get_secret():
         return json.loads(jsonString)
 
 
-
-#def get_password(secret):
-#        return secret['password']
-def get_password():
-        f = open(password_file, "r")
-        result = f.readline()
+def get_password(secret):
+        return secret['password']
+#def get_password():
+#        f = open(password_file, "r")
+#        result = f.readline()
 #        print(result)
-        f.close()
-        return result[:-1]
+#        f.close()
+#        return result[:-1]
 
 def connect():
 	global connection
-#	secret = get_secret()
-#	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password(secret))
-	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password())
+	secret = get_secret()
+	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password(secret))
+#	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password())
 	connection.set_session(autocommit=True)
 
 def execute(query, args=None):
