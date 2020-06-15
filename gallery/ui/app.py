@@ -27,10 +27,19 @@ def greet(name):
 
 @app.route('/admin')
 def user_list():
-     name1 = 'testies'
      names = all_usernames() 
-     return render_template("users.html", name=names[0])
+     return render_template("users.html", result=names)
 
 @app.route('/admin/adduser')
 def add_new_user():
     return render_template("new_user.html")
+
+@app.route('/admin/create', methods=["POST"])
+def create_user():
+    #Take in some variables and call the add user method
+    return render_template("adduser.html")
+
+@app.route('/admin/userinfo')
+def reveal_user():
+    return render_template("get_user.html", username=name)
+

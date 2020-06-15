@@ -8,7 +8,10 @@
 
   <body>
     <h1>Python Image Gallery Users List</h1>
-    <h2> {{name}} </h2>
+      <from action="admin/userinfo" {% for elem in result %}
+        <h2>{{elem}}</h2>
+      {%endfor%}
+    <h2> </h2>
     <a href="admin/adduser">Add User</a>
   </body>
 </html>

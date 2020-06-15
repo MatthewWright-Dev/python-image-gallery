@@ -7,7 +7,13 @@
   </head>
 
   <body>
-    <h1>User Name Here</h1>
+    <h1>Add User</h1>
+    <form action="/admin/create" method="POST">
+      Username: <input name="username" value=""/><br />
+      Password: <input name="password" value=""/><br />
+      Full Name: <input name="fullname" value=""/><br />
+      <input type="submit" value="Create User" />
+    </from>  
   </body>
 </html>
 

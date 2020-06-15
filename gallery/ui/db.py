@@ -63,7 +63,12 @@ def all_usernames():
 	res = execute('select username from users')
 	arr = []
 	for row in res:
-		arr.append(row)
+		a = str(row).replace(')', '')
+		a = a.replace('(','')
+		a = a.replace(',','')
+		a = a.replace('\'', '')
+		arr.append(a)
+	ar = [i[0] for i in arr]
 	return arr
 
 def insertUser(userName, password, full_name):
