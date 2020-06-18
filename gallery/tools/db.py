@@ -7,7 +7,7 @@ db_host = "image-gallery.cgh7vkgen2ke.us-east-2.rds.amazonaws.com"
 db_name="image_gallery"
 db_user="image_gallery"
 
-password_file = "/home/ec2-user/.ig_config"
+#password_file = "/home/ec2-user/.ig_config"
 
 connection = None
 

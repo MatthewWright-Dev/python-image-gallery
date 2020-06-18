@@ -73,7 +73,7 @@ def insertUser(userName, password, full_name):
 	connect()
 	query = "insert into users (userName, password, full_name) values(%s, %s, %s);"
 	try:
-		execute(query, (userName, password, full_name))
+		return execute(query, (userName, password, full_name))
 	except:
 		print("Unexpected error: ")
 
@@ -84,6 +84,25 @@ def deleteUser(userName):
 		execute(query, (userName,))
 	except Exception as e:
 		print("Unexpected error", e)
+
+def oneUser(name):
+	connect()
+	query = "select * from users where username=%s;"
+	res = execute(query, (name,))
+	arr = []
+	for row in res:
+		arr.append(row)
+	a = []
+	for item in arr:
+		a.extend(item)	
+	# for row in res:
+	# 	a = str(row).replace(')', '')
+	# 	a = a.replace('(','')
+	# 	a = a.replace(',','')
+	# 	a = a.replace('\'', '')
+	# 	arr.append(a)
+	# ar = [i[0] for i in arr]
+	return a
 
 def editUser(userName, userName2, password2, full_name2):
 	connect()

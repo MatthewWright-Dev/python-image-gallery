@@ -7,7 +7,7 @@ from db import all_usernames
 from db import insertUser
 from db import editUser
 from db import deleteUser
-
+from db import oneUser
 
 app = Flask(__name__)
 
@@ -20,9 +20,11 @@ def hello_world():
 def goodbye():
     return 'Goodbye'
 
-@app.route('/greet/<name>')
+@app.route('/admin/<name>')
 def greet(name):
-    return 'nice to meet you ' + name
+    res = oneUser(name) 
+    return render_template("get_user.html", username=name, passw=res[1], full=res[2])
+# fname=res[1])
 
 
 @app.route('/admin')
@@ -43,3 +45,6 @@ def create_user():
 def reveal_user():
     return render_template("get_user.html", username=name)
 
+@app.route('/admin/updateuser')
+def change_user():
+    return render_template("edit_user.html")
