@@ -36,10 +36,14 @@ def user_list():
 def add_new_user():
     return render_template("new_user.html")
 
-@app.route('/admin/create', methods=["POST"])
+@app.route('/admin/create', methods = ['POST'])
 def create_user():
-    #Take in some variables and call the add user method
+    name = request.form['username']
+    passwrd = request.form['password']
+    fnam = request.form['fullname']
+    insertUser(name, passwrd, fnam)
     return render_template("adduser.html")
+
 
 @app.route('/admin/userinfo')
 def reveal_user():
