@@ -1,6 +1,7 @@
 import psycopg2
 import json
-from secrets import get_secret_image_gallery
+from . import secrets
+#from secrets import get_secret_image_gallery
 
 db_host = "image-gallery.cgh7vkgen2ke.us-east-2.rds.amazonaws.com"
 #db_host ="database-1.cgh7vkgen2ke.us-east-2.rds.amazonaws.com"
@@ -11,7 +12,7 @@ db_user="image_gallery"
 connection = None
 
 def get_secret():
-        jsonString = get_secret_image_gallery()
+        jsonString = secrets.get_secret_image_gallery()
 #        print(json.loads(jsonString)['password'])
 	
         return json.loads(jsonString)
@@ -20,17 +21,11 @@ def get_secret():
 
 def get_password(secret):
         return secret['password']
-#def get_password():
-#        f = open(password_file, "r")
-#        result = f.readline()
-#        print(result)
-#        f.close()
-#        return result[:-1]
+
 def connect():
 	global connection
 	secret = get_secret()
 	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password(secret))
-#	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password())
 	connection.set_session(autocommit=True)
 
 def execute(query, args=None):
@@ -48,13 +43,7 @@ def all_users():
 	res = execute('select * from users')
 	for row in res:
 		print(row)
-#	res = execute("update users set password=%s where username='fred'", ('banana',))
-#	res = execute('select * from users')
-#	for row in res:
-#		print(row)
 
-#if __name__ == '__main__':
-#        main()
 
 def all_usernames():
 	connect()
@@ -66,7 +55,6 @@ def all_usernames():
 		a = a.replace(',','')
 		a = a.replace('\'', '')
 		arr.append(a)
-	ar = [i[0] for i in arr]
 	return arr
 
 def insertUser(userName, password, full_name):

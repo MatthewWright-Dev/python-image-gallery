@@ -2,12 +2,8 @@ from flask import Flask
 from flask import request
 from flask import render_template
 
-from db import all_users
-from db import all_usernames
-from db import insertUser
-from db import editUser
-from db import deleteUser
-from db import oneUser
+from . import db
+
 
 app = Flask(__name__)
 
@@ -22,14 +18,14 @@ def goodbye():
 
 @app.route('/admin/<name>')
 def greet(name):
-    res = oneUser(name) 
+    res = db.oneUser(name) 
     return render_template("get_user.html", username=name, passw=res[1], full=res[2])
 # fname=res[1])
 
 
 @app.route('/admin')
 def user_list():
-     names = all_usernames() 
+     names = db.all_usernames() 
      return render_template("users.html", result=names)
 
 @app.route('/admin/adduser')
@@ -41,7 +37,7 @@ def create_user():
     name = request.form['username']
     passwrd = request.form['password']
     fnam = request.form['fullname']
-    insertUser(name, passwrd, fnam)
+    db.insertUser(name, passwrd, fnam)
     return render_template("adduser.html")
 
 
