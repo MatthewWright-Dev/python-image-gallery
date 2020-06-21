@@ -10,7 +10,8 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     y = 1
-    return 'Hello, AGAIN World!, how are you this evening?'
+    return redirect('/admin')
+    #return 'Hello, AGAIN World!, how are you this evening?'
 
 @app.route('/goodbye')
 def goodbye():
