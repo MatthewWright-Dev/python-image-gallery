@@ -9,6 +9,7 @@ yum install -y gcc
 yum install -y python3-devel
 yum install -y postgresql-devel
 amazon-linux-extras install -y nginx1
+yum install -y docker
 
 #Configure/install custom software
 cd /home/ec2-user

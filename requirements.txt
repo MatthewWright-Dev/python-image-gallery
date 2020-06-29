@@ -1,4 +1,5 @@
 boto3
+boto
 psycopg2
 flask
 uwsgi
