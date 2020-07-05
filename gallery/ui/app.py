@@ -49,3 +49,10 @@ def reveal_user():
 @app.route('/admin/updateuser')
 def change_user():
     return render_template("edit_user.html")
+
+def main():
+    print("python main function")
+
+
+if __name__ == '__main__':
+    main()
