@@ -1,10 +1,9 @@
 import psycopg2
 import json
-from . import secrets
+from ..aws import secrets
 #from secrets import get_secret_image_gallery
 
 db_host = "image-gallery.cgh7vkgen2ke.us-east-2.rds.amazonaws.com"
-#db_host ="database-1.cgh7vkgen2ke.us-east-2.rds.amazonaws.com"
 db_name="image_gallery"
 db_user="image_gallery"
 
@@ -13,11 +12,7 @@ connection = None
 
 def get_secret():
         jsonString = secrets.get_secret_image_gallery()
-#        print(json.loads(jsonString)['password'])
-	
         return json.loads(jsonString)
-
-
 
 def get_password(secret):
         return secret['password']
@@ -37,13 +32,11 @@ def execute(query, args=None):
 		cursor.execute(query, args)
 	return cursor
 
-#def main():
 def all_users():
 	connect()
 	res = execute('select * from users')
 	for row in res:
 		print(row)
-
 
 def all_usernames():
 	connect()
