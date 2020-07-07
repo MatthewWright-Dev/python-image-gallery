@@ -1,0 +1,20 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>CPSC 4973  Database Users List</title>
+  </head>
+
+  <body>
+    <h1>Python Image Gallery Users List</h1> 
+    
+      {% for elem in result %}
+        <h2><a href="admin/{{elem}}">{{elem}}</a></h2>
+        <h3><button href="deleteUser">Delete {{elem}}</button></h3>
+      {%endfor%}
+      
+    <h2> </h2>
+    <a href="admin/adduser">Add User</a>
+  </body>
+</html>

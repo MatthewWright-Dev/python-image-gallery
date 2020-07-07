@@ -1,29 +1,36 @@
 import psycopg2
 import json
 from ..aws import secrets
+import os
 #from secrets import get_secret_image_gallery
 
-db_host = "image-gallery.cgh7vkgen2ke.us-east-2.rds.amazonaws.com"
-db_name="image_gallery"
-db_user="image_gallery"
-
+db_host = os.getenv('PG_HOST')#"image-gallery.cgh7vkgen2ke.us-east-2.rds.amazonaws.com"
+db_name= os.getenv('IG_DATABASE')#"image_gallery"
+db_user= os.getenv('IG_USER')#"image_gallery"
+passw= os.getenv('IG_PASSWD')
 
 connection = None
 
-def get_secret():
-        jsonString = secrets.get_secret_image_gallery()
-        return json.loads(jsonString)
+# def get_secret():
+# 		jsonString = secrets.get_secret_image_gallery()
+#         return json.loads(jsonString)
 
-def get_password(secret):
-        return secret['password']
+# def get_password(secret):
+#         return secret['password']
 
 def connect():
 	global connection
-	secret = get_secret()
-	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password(secret))
+	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=passw)
 	connection.set_session(autocommit=True)
 
+# def connect():
+# 	global connection
+# 	secret = get_secret()
+# 	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password(secret))
+# 	connection.set_session(autocommit=True)
+
 def execute(query, args=None):
+	connect()
 	global connection
 	cursor = connection.cursor()
 	if not args :
@@ -33,13 +40,13 @@ def execute(query, args=None):
 	return cursor
 
 def all_users():
-	connect()
+	#connect()
 	res = execute('select * from users')
 	for row in res:
 		print(row)
 
 def all_usernames():
-	connect()
+	#connect()
 	res = execute('select username from users')
 	arr = []
 	for row in res:
@@ -51,7 +58,7 @@ def all_usernames():
 	return arr
 
 def insertUser(userName, password, full_name):
-	connect()
+	#connect()
 	query = "insert into users (userName, password, full_name) values(%s, %s, %s);"
 	try:
 		return execute(query, (userName, password, full_name))
@@ -59,7 +66,7 @@ def insertUser(userName, password, full_name):
 		print("Unexpected error: ")
 
 def deleteUser(userName):
-	connect()
+	#connect()
 	query = "DELETE FROM users WHERE username=%s;"
 	try:
 		execute(query, (userName,))
@@ -67,7 +74,7 @@ def deleteUser(userName):
 		print("Unexpected error", e)
 
 def oneUser(name):
-	connect()
+	#connect()
 	query = "select * from users where username=%s;"
 	res = execute(query, (name,))
 	arr = []
@@ -86,7 +93,7 @@ def oneUser(name):
 	return a
 
 def editUser(userName, userName2, password2, full_name2):
-	connect()
+	#connect()
 	deleteUser(userName)
 	query = "insert into users (userName, password, full_name) values(%s, %s, %s);"
 	try:

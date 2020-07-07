@@ -7,14 +7,17 @@
   </head>
 
   <body>
-    <h1>Python Image Gallery Users List</h1> 
-    
-      {% for elem in result %}
-        <h2><a href="admin/{{elem}}">{{elem}}</a></h2>
-        <h3><button href="deleteUser">Delete {{elem}}</button></h3>
-      {%endfor%}
-      
-    <h2> </h2>
-    <a href="admin/adduser">Add User</a>
+    <h1>Users</h1>
+    <ol>
+      {% for user in users %}
+      <li><a href="/admin/editUser/{{ user.username }}">{{ user.full_name }} ({{ user.username }})</a> -- <a href="/admin/deleteUser/{{ user.username }}">Delete</a></li>
+      {% endfor %}
+    </ol>
+    <a href="../admin/updateuser">Edit User</a>
+    <a href="../">Home</a>
   </body>
 </html>
+
+
+
+
