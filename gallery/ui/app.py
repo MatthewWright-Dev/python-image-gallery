@@ -5,17 +5,21 @@ from flask import session
 from flask import redirect
 from flask import flash
 from flask import url_for
+from flask import send_file
 
 import os
+import io
 from werkzeug.utils import secure_filename
 from functools import wraps
 
-from ..data.photos import add_photo
-from ..data.photos import get_photos
+from ..data.postgres_photo_dao import PostgresPhotoDAO
+from ..data.photo import Photo
 from ..data import db
 from ..data.user import User
 from ..data.postgres_user_dao import PostgresUserDAO
 from ..aws.s3 import put_object
+from ..aws.s3 import get_object
+
 
 bucket = os.getenv("S3_IMAGE_BUCKET")
 UPLOAD_FOLDER = bucket
@@ -41,6 +45,8 @@ def requires_admin(view):
 def get_user_dao():
     return PostgresUserDAO()
 
+def get_photo_dao():
+    return PostgresPhotoDAO()
 
 @app.route('/admin/users')
 @requires_admin
@@ -65,10 +71,10 @@ def executeDeleteUser(username):
     
 @app.route('/')
 def main_menu():
-    if session['username'] is None:
-        return render_template('mainMenu.html', user='.... you are not logged in after all.')
-    else:
-        return render_template('mainMenu.html', user=session['username'])
+    # if session['username'] is None:
+    #     return render_template('mainMenu.html', user='.... you are not logged in after all.')
+    # else:
+    return render_template('mainMenu.html', user=session['username'])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -89,7 +95,7 @@ def upload_file(username):
             return redirect(request.url)
         if file and allowed_file(file.filename):
             if put_object(bucket, file.filename, file):
-                db.add_photo(file.filename, username)
+                get_photo_dao().add_photo(Photo(file.filename, username))
             return redirect('/')
     return '''
     <!doctype html>
@@ -105,10 +111,17 @@ def upload_file(username):
 
 @app.route('/viewImages/<username>')
 def viewImages(username):
-    pics = get_photos(bucket, username)
+    pics = get_photo_dao().get_photos_by_username(username)
     if not pics:
         return 'No Photos Present for you...' 
-    return render_template('photos.html', title='Image Gallery',user=username,photos=get_photos(bucket, username))
+    return render_template('photos.html', title='Image Gallery',user=username,photos=pics)
+
+@app.route('/photos/<title>')
+def fetchPhoto(title):
+    pic = get_object(bucket, title)
+    for key, value in pic.items() :
+        print (key, value)
+    return pic['Body'].read()
 
 @app.route('/invalidLogin')
 def invalidLogin():

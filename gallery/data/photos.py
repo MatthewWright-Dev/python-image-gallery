@@ -10,7 +10,7 @@ def add_photo(title, username):
 
 def get_photos(bucket_name, username):
     result = []
-    cursor = execute("select * from photos where username='"+username+"';")
+    cursor = execute("select title, username from photos where username=%s;", (username,))
     for t in cursor.fetchall():
         result.append(get_object(bucket_name, t[0]))
     return result
