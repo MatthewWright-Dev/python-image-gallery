@@ -71,10 +71,10 @@ def executeDeleteUser(username):
     
 @app.route('/')
 def main_menu():
-    # if session['username'] is None:
-    #     return render_template('mainMenu.html', user='.... you are not logged in after all.')
-    # else:
-    return render_template('mainMenu.html', user=session['username'])
+    if session and session['username']:
+        return render_template('mainMenu.html', user=session['username'])
+    else:
+        return redirect('/login')
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -97,17 +97,7 @@ def upload_file(username):
             if put_object(bucket, file.filename, file):
                 get_photo_dao().add_photo(Photo(file.filename, username))
             return redirect('/')
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    <a href="../">Home</a>
-    '''
-
+    return render_template('upload_photo.html')
 
 @app.route('/viewImages/<username>')
 def viewImages(username):

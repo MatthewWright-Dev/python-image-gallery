@@ -9,10 +9,12 @@
   <body>
     <h1>{{ user }}'s Photos</h1>
     {% for photo in photos %}
-    {{photo.title}}
-    <img src="/photos/{{ photo.title }}"/><br />
+    <figure>
+      <img src="/photos/{{ photo.title }}" width="600"/>
+      <figcaption>{{photo.title}}</figcaption>
+    </figure><br />
     {% endfor %}  
-    <a href="../">Main Menu</a>
-   
+    <br />
+    <h2><a href="../">Main Menu</a></h2>
   </body>
 </html>
