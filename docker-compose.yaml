@@ -3,7 +3,7 @@ version: "3.8"
 
 services:
 
-  db:
+  database:
     image: postgres:11
     deploy:
       mode: "replicated"
@@ -20,13 +20,13 @@ services:
     volumes:
       - "/mnt/efs/:/var/lib/postgresql/data"
 
-  web:
+  image_gallery:
     image: mattmyth/image-gallery:latest
     deploy:
       replicas: 4
     user: "32767"
     environment:
-      PG_HOST: web-app_db
+      PG_HOST: web-app_database
       PG_PORT: 5432  
       IG_USER: image_gallery
       IG_DATABASE: image_gallery
@@ -38,7 +38,7 @@ services:
     ports:
       - "80:8888"
     depends_on:
-      - db
+      - database
   
 secrets:
   ig_password:
