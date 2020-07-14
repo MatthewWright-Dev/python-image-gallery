@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+docker run --name postgres1 --user 32767 -it --rm -v /home/ec2-user/python-image-gallery/run/secrets:/mnt/secrets -v ig-db:/var/lib/postgresql/data -d ig-db

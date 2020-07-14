@@ -7,10 +7,11 @@ ENV PG_HOST=image-gallery.cgh7vkgen2ke.us-east-2.rds.amazonaws.com
 ENV PG_PORT=5432
 ENV IG_DATABASE=image_gallery
 ENV IG_USER=image_gallery
-ENV IG_PASSWD=deadlinejune7
+# ENV IG_PASSWD=somethingismissing
 ENV IG_PASSWD_FILE=/pssword
 ENV S3_IMAGE_BUCKET=image.gallery.photos.mtw0038
- 
+ENV FLASK_SESSION_FILE=/ses 
+
 RUN apt-get update -y
 RUN apt-get install python3 -y #&& apt-get install postgresql -y
 RUN apt-get install python3-pip -y
@@ -23,7 +24,6 @@ WORKDIR /python-image-gallery/
 RUN pip3 install -r requirements.txt 
 COPY --chown=ig:ig . /python-image-gallery/ 
 WORKDIR /python-image-gallery/
-CMD ["./app/createDB"]
 
 USER ig
 

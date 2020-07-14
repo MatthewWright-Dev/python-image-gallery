@@ -5,9 +5,14 @@ import os
 #from secrets import get_secret_image_gallery
 
 db_host = os.getenv('PG_HOST')#"image-gallery.cgh7vkgen2ke.us-east-2.rds.amazonaws.com"
-db_name= os.getenv('IG_DATABASE')#"image_gallery"
-db_user= os.getenv('IG_USER')#"image_gallery"
-passw= os.getenv('IG_PASSWD')
+db_name = os.getenv('IG_DATABASE')#"image_gallery"
+db_user = os.getenv('IG_USER')#"image_gallery"
+#passwd = os.getenv('IG_PASSWD_FILE')
+
+def get_password():
+	f= open(os.getenv('IG_PASSWD_FILE'),'r')
+	a = f.readline()
+	return a.strip()
 
 connection = None
 
@@ -20,7 +25,8 @@ connection = None
 
 def connect():
 	global connection
-	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=passw)
+	#connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=passwd)
+	connection = psycopg2.connect(host=db_host, dbname=db_name, user=db_user, password=get_password())
 	connection.set_session(autocommit=True)
 
 # def connect():

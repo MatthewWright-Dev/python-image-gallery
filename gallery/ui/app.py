@@ -26,8 +26,15 @@ UPLOAD_FOLDER = bucket
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
-app.secret_key = 'fhasdhfuy^%@456&%^#$56'
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def get_session():
+	f= open(os.getenv('FLASK_SESSION_FILE'),'r')
+	a = f.readline()
+	return a.strip()
+
+app.secret_key = get_session()
 
 db.connect()
 

@@ -1,32 +1,53 @@
 ---
-version: "3"
+version: "3.8"
 
 services:
 
   db:
-    image: demo-postgres
-    user: "32767"
+    image: postgres:11
+    deploy:
+      mode: "replicated"
+      replicas: 1
+      placement:
+        constraints:
+          - "node.role==manager"
+    environment: 
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
     volumes:
-      - "/home/ec2-user/secrets:/mnt/secrets"
-      - "demo-postgres:/var/lib/postgresql/data"
+      - "/mnt/efs/:/var/lib/postgresql/data"
 
   web:
-    image: app
+    image: mattmyth/image-gallery:latest
+    deploy:
+      replicas: 4
     user: "32767"
     environment:
-      PG_HOST: "db"
-      PG_PORT: "5432"   
-      IG_USER: "postgres"
-      IG_PASSWORD_FILE: "/mnt/secrets/postgres-passwd"
-      IG_DATABASE: "postgres"
+      PG_HOST: web-app_db
+      PG_PORT: 5432  
+      IG_USER: image_gallery
+      IG_DATABASE: image_gallery
+      IG_PASSWD_FILE: /run/secrets/ig_password 
+      FLASK_SESSION_FILE: /run/secrets/flask_session
+    secrets:
+      - ig_password
+      - flask_session
     ports:
-      - "8888:8888"
-    volumes:
-      - "/home/ec2-user/secrets:/mnt/secrets"
+      - "80:8888"
     depends_on:
-      - "db" 
-
-
+      - db
+  
+secrets:
+  ig_password:
+    file: /home/ec2-user/secrets/ig_password
+  flask_session:  
+    file: /home/ec2-user/secrets/flask_session
+  postgres_password:
+    file: /home/ec2-user/secrets/postgres_password
+    
 volumes:
-  demo-postgres:
+  ig-db:
     external: yes

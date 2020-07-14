@@ -4,7 +4,7 @@ create table photos (
 
 
 create table users (
-	username	     VARCHAR(120) PRIMARY KEY,
+	username	 VARCHAR(120) PRIMARY KEY,
 	password     VARCHAR(100) NOT NULL, 
 	full_name    VARCHAR(100) NOT NULL);
 
