@@ -10,7 +10,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - "node.role==manager"
+          - "node.labels.database==yes"
     environment: 
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_USER: postgres
